@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/page": "/",
+  "/profile/page": "/profile",
+  "/settings/page": "/settings",
+  "/support/billing/page": "/support/billing",
+  "/support/help-center/page": "/support/help-center",
+  "/support/status/page": "/support/status",
+  "/support/technical-support/page": "/support/technical-support"
+}
