@@ -1,10 +1,10 @@
 {
   "/_not-found/page": "/_not-found",
-  "/page": "/",
   "/profile/page": "/profile",
   "/settings/page": "/settings",
-  "/support/billing/page": "/support/billing",
-  "/support/help-center/page": "/support/help-center",
+  "/page": "/",
   "/support/status/page": "/support/status",
-  "/support/technical-support/page": "/support/technical-support"
+  "/support/help-center/page": "/support/help-center",
+  "/support/technical-support/page": "/support/technical-support",
+  "/support/billing/page": "/support/billing"
 }

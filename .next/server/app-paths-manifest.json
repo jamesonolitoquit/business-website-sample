@@ -1,10 +1,10 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
   "/profile/page": "app/profile/page.js",
   "/settings/page": "app/settings/page.js",
-  "/support/billing/page": "app/support/billing/page.js",
-  "/support/help-center/page": "app/support/help-center/page.js",
+  "/page": "app/page.js",
   "/support/status/page": "app/support/status/page.js",
-  "/support/technical-support/page": "app/support/technical-support/page.js"
+  "/support/help-center/page": "app/support/help-center/page.js",
+  "/support/technical-support/page": "app/support/technical-support/page.js",
+  "/support/billing/page": "app/support/billing/page.js"
 }
