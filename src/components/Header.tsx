@@ -24,7 +24,26 @@ export default function Header() {
 
   const handleNavClick = (sectionId: string, e?: React.MouseEvent) => {
     e?.preventDefault()
-    router.push(`/#${sectionId}`)
+    
+    if (pathname === '/') {
+      // If we're on the home page, scroll to the section with offset for header
+      const element = document.getElementById(sectionId)
+      if (element) {
+        const header = document.querySelector('header')
+        const headerHeight = header ? header.offsetHeight : 80
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    } else {
+      // If we're not on the home page, navigate to home with hash
+      router.push(`/#${sectionId}`)
+    }
+    
     setIsMenuOpen(false) // Close mobile menu after navigation
   }
 
