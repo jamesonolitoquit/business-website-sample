@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import DemoButton from '@/components/DemoButton'
+import BackToTop from '@/components/BackToTop'
 import { AuthProvider } from '@/contexts/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -31,6 +32,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <DemoButton />
+          <BackToTop />
         </AuthProvider>
       </body>
     </html>

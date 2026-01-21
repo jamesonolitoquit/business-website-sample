@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
+import { useAuth } from '@/contexts/AuthContext'
 
 // Dynamically import AuthButtons to avoid SSR issues with Firebase
 const AuthButtons = dynamic(() => import('./AuthButtons'), {
@@ -14,20 +15,17 @@ const AuthButtons = dynamic(() => import('./AuthButtons'), {
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSupportDropdownOpen, setIsSupportDropdownOpen] = useState(false)
+  const [isMobileSupportDropdownOpen, setIsMobileSupportDropdownOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
+  const { isLoggedIn, toggleLogin } = useAuth()
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
   const handleNavClick = (sectionId: string, e?: React.MouseEvent) => {
-    if (pathname === '/') {
-      // If we're on the home page, scroll to the section
-      e?.preventDefault()
-      const element = document.getElementById(sectionId)
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-    // If we're not on the home page, the Link component will handle navigation to /#sectionId
+    e?.preventDefault()
+    router.push(`/#${sectionId}`)
+    setIsMenuOpen(false) // Close mobile menu after navigation
   }
 
   return (
@@ -139,7 +137,7 @@ export default function Header() {
         style={{ transition: 'max-height 0.3s ease-in-out' }}
       >
         <div className="px-4 py-2 space-y-2">
-          <Link href="/" className="block text-primary font-semibold py-2">
+          <Link href="/" className="block text-primary font-semibold py-2" onClick={() => setIsMenuOpen(false)}>
             Home
           </Link>
           <Link href="#services" className="block text-gray-600 hover:text-primary py-2" onClick={(e) => handleNavClick('services', e)}>
@@ -149,27 +147,76 @@ export default function Header() {
             About
           </Link>
           <div className="py-2">
-            <div className="text-gray-600 font-medium mb-2">Support</div>
-            <div className="pl-4 space-y-1">
-              <Link href="/support/help-center" className="block text-gray-500 hover:text-primary py-1">
-                Help Center
-              </Link>
-              <Link href="/support/billing" className="block text-gray-500 hover:text-primary py-1">
-                Billing
-              </Link>
-              <Link href="/support/technical-support" className="block text-gray-500 hover:text-primary py-1">
-                Technical Support
-              </Link>
-              <Link href="/support/status" className="block text-gray-500 hover:text-primary py-1">
-                Status Page
-              </Link>
-            </div>
+            <button
+              onClick={() => setIsMobileSupportDropdownOpen(!isMobileSupportDropdownOpen)}
+              className="flex items-center justify-between w-full text-gray-600 hover:text-primary transition-colors"
+            >
+              <span className="font-medium">Support</span>
+              <svg className={`w-4 h-4 transition-transform ${isMobileSupportDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {isMobileSupportDropdownOpen && (
+              <div className="pl-4 space-y-1 mt-2">
+                <Link href="/support/help-center" className="block text-gray-500 hover:text-primary py-1" onClick={() => setIsMenuOpen(false)}>
+                  Help Center
+                </Link>
+                <Link href="/support/billing" className="block text-gray-500 hover:text-primary py-1" onClick={() => setIsMenuOpen(false)}>
+                  Billing
+                </Link>
+                <Link href="/support/technical-support" className="block text-gray-500 hover:text-primary py-1" onClick={() => setIsMenuOpen(false)}>
+                  Technical Support
+                </Link>
+                <Link href="/support/status" className="block text-gray-500 hover:text-primary py-1" onClick={() => setIsMenuOpen(false)}>
+                  Status Page
+                </Link>
+              </div>
+            )}
           </div>
           <Link href="#contact" className="block text-gray-600 hover:text-primary py-2" onClick={(e) => handleNavClick('contact', e)}>
             Contact
           </Link>
           <div className="border-t pt-2 mt-2">
-            <AuthButtons />
+            {isLoggedIn ? (
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">JD</span>
+                  </div>
+                  <span className="text-gray-700 font-medium">John Doe</span>
+                </div>
+                <Link href="/profile" className="block text-gray-600 hover:text-primary py-1" onClick={() => setIsMenuOpen(false)}>
+                  Profile
+                </Link>
+                <Link href="/settings" className="block text-gray-600 hover:text-primary py-1" onClick={() => setIsMenuOpen(false)}>
+                  Settings
+                </Link>
+                <button
+                  onClick={() => {
+                    toggleLogin()
+                    setIsMenuOpen(false)
+                  }}
+                  className="block w-full text-left text-red-600 hover:text-red-700 py-1"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <button
+                  onClick={() => {/* TODO: Open sign up modal */ setIsMenuOpen(false)}}
+                  className="block w-full text-left text-gray-600 hover:text-primary py-1"
+                >
+                  Sign up
+                </button>
+                <button
+                  onClick={() => {/* TODO: Open log in modal */ setIsMenuOpen(false)}}
+                  className="block w-full text-left bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  Log in
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
